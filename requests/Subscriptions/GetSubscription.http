@@ -1,0 +1,6 @@
+@host=http://localhost:5136
+@subscriptionId=5BF7820A-D881-44C1-A8D0-30DB20F30C7A
+
+GET  {{host}}/Subscriptions/{{subscriptionId}}
+
+  
