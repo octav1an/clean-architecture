@@ -18,6 +18,12 @@ public class SubscriptionsRepository : ISubscriptionsRepository
     await _dbContext.Subscriptions.AddAsync(subscription);
   }
 
+  public Task RemoveSubscriptionAsync(Subscription subscription)
+  {
+    _dbContext.Remove(subscription);
+    return Task.CompletedTask;
+  }
+
   public async Task<Subscription?> GetByIdAsync(Guid subscriptionId)
   {
     return await _dbContext.Subscriptions.FindAsync(subscriptionId);
