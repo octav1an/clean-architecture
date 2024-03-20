@@ -30,4 +30,15 @@ public class GymController : ControllerBase
       gym => Ok(new GymResponse(gym.Id, gym.Name)),
       _ => Problem());
   }
+  [HttpGet]
+  public async Task<IActionResult> ListGyms(Guid subscriptionId)
+  {
+    var query = new ListGymsQuery(subscriptionId);
+
+    var queryResult = await _mediator.Send(query);
+
+    return queryResult.MatchFirst(
+      gyms => Ok(gyms.ConvertAll(gym => new GymResponse(gym.Id, gym.Name))),
+      _ => Problem());
+  }
 }
