@@ -36,4 +36,10 @@ public class SubscriptionsRepository : ISubscriptionsRepository
       .AsNoTracking()
       .AnyAsync(subscription => subscription.Id == subscriptionId);
   }
+
+  public Task UpdateAsync(Subscription subscription)
+  {
+    _dbContext.Update(subscription);
+    return Task.CompletedTask;
+  }
 }
