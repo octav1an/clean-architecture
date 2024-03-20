@@ -1,6 +1,7 @@
 using GymManagement.Application.Common.Interfaces;
 using GymManagement.Domain.Gyms;
 using GymManagement.Infrastructure.Common.Persistance;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagement.Infrastructure.Gyms.Persistance;
 
@@ -21,5 +22,18 @@ public class GymRepository : IGymRepository
   public async Task<Gym?> GetByIdAsync(Guid id)
   {
     return await _dbContext.Gyms.FindAsync(id);
+  }
+
+  public async Task<List<Gym>> ListBySubscriptionIdAsync(Guid subscriptionId)
+  {
+    return await _dbContext.Gyms
+      .Where(gym => gym.SubscriptionId == subscriptionId)
+      .ToListAsync();
+  }
+
+  public Task RemoveGymAsync(Gym gym)
+  {
+    _dbContext.Remove(gym);
+    return Task.CompletedTask;
   }
 }

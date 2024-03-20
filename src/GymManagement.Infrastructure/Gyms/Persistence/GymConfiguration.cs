@@ -15,7 +15,6 @@ public class GymConfiguration : IEntityTypeConfiguration<Gym>
 
     builder.Property(g => g.Name);
 
-    builder.Property("_subscriptionId")
-      .HasColumnName("SubscriptionId");
+    builder.Property(g => g.SubscriptionId);
   }
 }

@@ -1,5 +1,7 @@
 using GymManagement.Application.Gyms.Commands.CreateGym;
-using GymManagement.Application.Gyms.Queries.GetGymQuery;
+using GymManagement.Application.Gyms.Commands.DeleteGym;
+using GymManagement.Application.Gyms.Queries.GetGym;
+using GymManagement.Application.Gyms.Queries.ListGyms;
 using GymManagement.Contracts.Gyms;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +48,23 @@ public class GymController : ControllerBase
         statusCode: StatusCodes.Status404NotFound,
         detail: err.Description));
   }
+
+  [HttpGet("{gymId:guid}")]
+  public async Task<IActionResult> GetGym(
+    Guid subscriptionId,
+    Guid gymId)
+  {
+    var query = new GetGymQuery(subscriptionId, gymId);
+
+    var queryResult = await _mediator.Send(query);
+
+    return queryResult.MatchFirst(
+      gym => Ok(new GymResponse(gym.Id, gym.Name)),
+      err => Problem(
+        statusCode: StatusCodes.Status404NotFound,
+        detail: err.Description));
+  }
+
   [HttpGet]
   public async Task<IActionResult> ListGyms(Guid subscriptionId)
   {
