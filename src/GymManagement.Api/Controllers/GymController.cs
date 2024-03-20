@@ -30,6 +30,22 @@ public class GymController : ControllerBase
       gym => Ok(new GymResponse(gym.Id, gym.Name)),
       _ => Problem());
   }
+
+  [HttpDelete("{gymId:guid}")]
+  public async Task<IActionResult> DeleteGym(
+    Guid subscriptionId,
+    Guid gymId)
+  {
+    var command = new DeleteGymCommand(subscriptionId, gymId);
+
+    var deleteGymResult = await _mediator.Send(command);
+
+    return deleteGymResult.MatchFirst<IActionResult>(
+      _ => NoContent(),
+      err => Problem(
+        statusCode: StatusCodes.Status404NotFound,
+        detail: err.Description));
+  }
   [HttpGet]
   public async Task<IActionResult> ListGyms(Guid subscriptionId)
   {
