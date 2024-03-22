@@ -18,6 +18,14 @@ public class Subscription
     Id = id ?? Guid.NewGuid();
   }
 
+  public int GetMaxGyms() => SubscriptionType.Name switch
+  {
+    nameof(SubscriptionType.Free) => 1,
+    nameof(SubscriptionType.Starter) => 1,
+    nameof(SubscriptionType.Pro) => 3,
+    _ => throw new InvalidOperationException()
+  };
+
   public ErrorOr<Success> AddGym(Gym gym)
   {
     if (_gymIds.Contains(gym.Id))
