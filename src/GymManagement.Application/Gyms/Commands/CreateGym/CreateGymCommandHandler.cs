@@ -31,7 +31,6 @@ public class CreateGymCommandHandler : IRequestHandler<CreateGymCommand, ErrorOr
 
     var gym = new Gym(request.Name, request.SubscriptionId);
 
-    // Check if I can add it and  is not duplicated
     var addGymResult = subscription.AddGym(gym);
 
     if (addGymResult.IsError)
