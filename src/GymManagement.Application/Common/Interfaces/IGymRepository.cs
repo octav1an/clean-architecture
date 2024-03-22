@@ -6,6 +6,7 @@ public interface IGymRepository
 {
   Task AddGymAsync(Gym gym);
   Task RemoveGymAsync(Gym gym);
+  Task RemoveRangeAsync(List<Gym> gyms);
   Task<Gym?> GetByIdAsync(Guid id);
   Task<List<Gym>> ListBySubscriptionIdAsync(Guid subscriptionId);
 }

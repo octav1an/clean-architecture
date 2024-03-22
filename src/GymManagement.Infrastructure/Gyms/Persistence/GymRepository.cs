@@ -36,4 +36,10 @@ public class GymRepository : IGymRepository
     _dbContext.Remove(gym);
     return Task.CompletedTask;
   }
+
+  public Task RemoveRangeAsync(List<Gym> gyms)
+  {
+    _dbContext.RemoveRange(gyms);
+    return Task.CompletedTask;
+  }
 }
