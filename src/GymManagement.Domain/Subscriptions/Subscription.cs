@@ -20,6 +20,16 @@ public class Subscription
 
   public ErrorOr<Success> AddGym(Gym gym)
   {
+    if (_gymIds.Contains(gym.Id))
+    {
+      throw new Exception("Gym already exists in the subscription");
+    }
+
+    if (_gymIds.Count() >= GetMaxGyms())
+    {
+      return SubscriptionErrors.CannotHaveMoreGymsThanTheSubscriptionAllows;
+    }
+
     _gymIds.Add(gym.Id);
 
     return Result.Success;
