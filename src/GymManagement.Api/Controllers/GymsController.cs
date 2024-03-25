@@ -10,11 +10,11 @@ namespace GymManagement.Api.Controllers;
 
 [ApiController]
 [Route("subscriptions/{subscriptionId:guid}/gyms")]
-public class GymController : ControllerBase
+public class GymsController : ControllerBase
 {
   private readonly IMediator _mediator;
 
-  public GymController(IMediator mediator)
+  public GymsController(IMediator mediator)
   {
     _mediator = mediator;
   }
