@@ -1,4 +1,5 @@
 using GymManagement.Domain.Gyms;
+using GymManagement.Infrastructure.Common.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,5 +17,12 @@ public class GymConfiguration : IEntityTypeConfiguration<Gym>
     builder.Property(g => g.Name);
 
     builder.Property(g => g.SubscriptionId);
+
+    builder.Property<int>("_maxRooms")
+      .HasColumnName("MaxRooms");
+
+    builder.Property<List<Guid>>("_roomIds")
+      .HasColumnName("RoomIds")
+      .HasListOfIdsConverter();
   }
 }

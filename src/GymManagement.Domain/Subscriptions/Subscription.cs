@@ -26,10 +26,19 @@ public class Subscription
     _ => throw new InvalidOperationException()
   };
 
+  public int GetMaxRooms() => SubscriptionType.Name switch
+  {
+    nameof(SubscriptionType.Free) => 1,
+    nameof(SubscriptionType.Starter) => 3,
+    nameof(SubscriptionType.Pro) => int.MaxValue,
+    _ => throw new InvalidOperationException()
+  };
+
   public ErrorOr<Success> AddGym(Gym gym)
   {
     if (_gymIds.Contains(gym.Id))
     {
+      // move error
       throw new Exception("Gym already exists in the subscription");
     }
 

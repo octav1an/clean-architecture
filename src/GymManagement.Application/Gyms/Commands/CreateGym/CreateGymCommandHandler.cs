@@ -29,7 +29,10 @@ public class CreateGymCommandHandler : IRequestHandler<CreateGymCommand, ErrorOr
 
     // Potentially check for authorization here
 
-    var gym = new Gym(request.Name, request.SubscriptionId);
+    var gym = new Gym(
+      name: request.Name,
+      subscriptionId: request.SubscriptionId,
+      maxRooms: subscription.GetMaxRooms());
 
     var addGymResult = subscription.AddGym(gym);
 
