@@ -1,5 +1,6 @@
 using ErrorOr;
 using GymManagement.Application.Common.Interfaces;
+using GymManagement.Domain.Rooms;
 using MediatR;
 
 namespace GymManagement.Application.Subscriptions.Commands.DeleteSubscription;
@@ -9,16 +10,19 @@ public class DeleteSubscriptionCommandHandler : IRequestHandler<DeleteSubscripti
   private readonly ISubscriptionsRepository _subscriptionRepository;
   private readonly IGymRepository _gymRepository;
   private readonly IAdminRepository _adminRepository;
+  private readonly IRoomRepository _roomRepository;
   private readonly IUnitOfWork _unitOfWork;
 
   public DeleteSubscriptionCommandHandler(
     ISubscriptionsRepository subscriptionRepository,
     IGymRepository gymRepository,
+    IRoomRepository roomRepository,
     IAdminRepository adminRepository,
     IUnitOfWork unitOfWork)
   {
     _subscriptionRepository = subscriptionRepository;
     _gymRepository = gymRepository;
+    _roomRepository = roomRepository;
     _adminRepository = adminRepository;
     _unitOfWork = unitOfWork;
   }
@@ -50,7 +54,12 @@ public class DeleteSubscriptionCommandHandler : IRequestHandler<DeleteSubscripti
     // Remove gyms associated to the subscription
     var gyms = await _gymRepository.ListBySubscriptionIdAsync(subscription.Id);
 
+    // Remove rooms associated with the subscription's gyms
+    var rooms = new List<Room>();
+    gyms.ForEach(async gym => rooms.AddRange(await _roomRepository.ListByGymIdAsync(gym.Id)));
+
     await _gymRepository.RemoveRangeAsync(gyms);
+    await _roomRepository.RemoveRangeAsync(rooms);
     await _adminRepository.UpdateAsync(admin);
     await _subscriptionRepository.RemoveSubscriptionAsync(subscription);
     await _unitOfWork.CommitChangesAsync();
