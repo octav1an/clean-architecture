@@ -9,15 +9,18 @@ public class DeleteGymCommandHandler : IRequestHandler<DeleteGymCommand, ErrorOr
 {
   private readonly IGymRepository _gymRepository;
   private readonly ISubscriptionsRepository _subscriptionRepository;
+  private readonly IRoomRepository _roomRepository;
   private readonly IUnitOfWork _unitOfWork;
 
   public DeleteGymCommandHandler(
     IGymRepository gymRepository,
     ISubscriptionsRepository subscriptionRepository,
+    IRoomRepository roomRepository,
     IUnitOfWork unitOfWork)
   {
     _gymRepository = gymRepository;
     _subscriptionRepository = subscriptionRepository;
+    _roomRepository = roomRepository;
     _unitOfWork = unitOfWork;
   }
 
@@ -38,6 +41,9 @@ public class DeleteGymCommandHandler : IRequestHandler<DeleteGymCommand, ErrorOr
     }
 
     subscription.RemoveGym(gym.Id);
+
+    var rooms = await _roomRepository.ListByGymIdAsync(gym.Id);
+    await _roomRepository.RemoveRangeAsync(rooms);
 
     await _subscriptionRepository.UpdateAsync(subscription);
     await _gymRepository.RemoveGymAsync(gym);

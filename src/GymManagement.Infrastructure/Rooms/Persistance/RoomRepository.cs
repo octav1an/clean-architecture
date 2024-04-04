@@ -30,11 +30,13 @@ public class RoomRepository : IRoomRepository
 
   public Task RemoveRangeAsync(List<Room> rooms)
   {
-    throw new NotImplementedException();
+    _dbContext.RemoveRange(rooms);
+    return Task.CompletedTask;
   }
 
   public Task RemoveRoomAsync(Room room)
   {
-    throw new NotImplementedException();
+    _dbContext.Remove(room);
+    return Task.CompletedTask;
   }
 }

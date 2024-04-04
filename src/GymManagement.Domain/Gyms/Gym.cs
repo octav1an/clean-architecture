@@ -46,6 +46,15 @@ public class Gym
     return _roomIds.Contains(roomId);
   }
 
+  public void RemoveRoom(Guid roomId)
+  {
+    if (!HasRoom(roomId))
+    {
+      throw new Exception("Room not found");
+    }
+
+    _roomIds.Remove(roomId);
+  }
 
   private Gym() { }
 

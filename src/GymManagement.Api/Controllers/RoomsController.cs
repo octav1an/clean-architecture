@@ -1,4 +1,5 @@
 using GymManagement.Application.Rooms.Commands.CreateRoom;
+using GymManagement.Application.Rooms.Commands.DeleteRoom;
 using GymManagement.Contracts.Rooms;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -31,4 +32,17 @@ public class RoomsController : ControllerBase
       _ => Problem());
   }
 
+  [HttpDelete("{roomId:guid}")]
+  public async Task<IActionResult> DeleteRoom(
+    Guid gymId,
+    Guid roomId)
+  {
+    var command = new DeleteRoomCommand(gymId, roomId);
+
+    var deleteRoomResult = await _mediator.Send(command);
+
+    return deleteRoomResult.MatchFirst<IActionResult>(
+      _ => NoContent(),
+      _ => Problem());
+  }
 }
