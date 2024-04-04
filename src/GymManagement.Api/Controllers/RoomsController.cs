@@ -1,5 +1,6 @@
 using GymManagement.Application.Rooms.Commands.CreateRoom;
 using GymManagement.Application.Rooms.Commands.DeleteRoom;
+using GymManagement.Application.Rooms.Queries.ListRooms;
 using GymManagement.Contracts.Rooms;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,18 @@ public class RoomsController : ControllerBase
 
     return deleteRoomResult.MatchFirst<IActionResult>(
       _ => NoContent(),
+      _ => Problem());
+  }
+
+  [HttpGet]
+  public async Task<IActionResult> ListRooms(Guid gymId)
+  {
+    var query = new ListRoomsQuery(gymId);
+
+    var queryResult = await _mediator.Send(query);
+
+    return queryResult.MatchFirst(
+      rooms => Ok(rooms.ConvertAll(room => new RoomResponse(room.Id, room.Name))),
       _ => Problem());
   }
 }

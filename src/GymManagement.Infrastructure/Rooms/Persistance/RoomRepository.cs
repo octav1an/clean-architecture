@@ -1,6 +1,7 @@
 using GymManagement.Application.Common.Interfaces;
 using GymManagement.Domain.Rooms;
 using GymManagement.Infrastructure.Common.Persistance;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagement.Infrastructure.Rooms.Persistence;
 
@@ -23,9 +24,11 @@ public class RoomRepository : IRoomRepository
     return await _dbContext.Rooms.FindAsync(id);
   }
 
-  public Task<List<Room>> ListByGymIdAsync(Guid gymId)
+  public async Task<List<Room>> ListByGymIdAsync(Guid gymId)
   {
-    throw new NotImplementedException();
+    return await _dbContext.Rooms
+      .Where(r => r.GymId == gymId)
+      .ToListAsync();
   }
 
   public Task RemoveRangeAsync(List<Room> rooms)
