@@ -1,0 +1,4 @@
+@host=http://localhost:5136
+@gymId=EFC421F6-2B2B-4638-ACAA-6A8A181EB5F0
+
+GET {{host}}/gyms/{{gymId}}/rooms

@@ -1,4 +1,5 @@
 using GymManagement.Domain.Subscriptions;
+using GymManagement.Infrastructure.Common.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,12 +14,15 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
     builder.Property(s => s.Id)
       .ValueGeneratedNever();
 
-    builder.Property("_adminId")
-      .HasColumnName("AdminId");
+    builder.Property(s => s.AdminId);
 
     builder.Property(s => s.SubscriptionType)
       .HasConversion(
         subscriptionType => subscriptionType.Name,
         name => SubscriptionType.FromName(name, false));
+
+    builder.Property<List<Guid>>("_gymIds")
+      .HasColumnName("GymIds")
+      .HasListOfIdsConverter();
   }
 }

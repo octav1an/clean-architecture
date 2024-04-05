@@ -1,0 +1,6 @@
+@host=http://localhost:5136
+@subscriptionId=53BD097B-3F70-4B8D-8344-9A18B6E2082C
+
+@gymId=4F9179CE-55C0-4B73-8383-B5152762C199
+
+DELETE {{host}}/subscriptions/{{subscriptionId}}/gyms/{{gymId}}

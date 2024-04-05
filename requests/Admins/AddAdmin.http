@@ -1,0 +1,4 @@
+@host=http://localhost:5136
+
+POST {{host}}/admins
+Content-Type: application/json
