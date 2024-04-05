@@ -1,5 +1,5 @@
 @host=http://localhost:5136
-@gymId=EFC421F6-2B2B-4638-ACAA-6A8A181EB5F0
+@gymId=EFC421F6-2B2B-4638-ACAA-6A8A181EB5FA
 @roomId=5637A3B5-1916-47D1-BF3C-7EACA88F2AAA
 
 DELETE {{host}}/gyms/{{gymId}}/rooms/{{roomId}}
