@@ -1,3 +1,4 @@
+using ErrorOr;
 using GymManagement.Application.Gyms.Commands.CreateGym;
 using GymManagement.Application.Gyms.Commands.DeleteGym;
 using GymManagement.Application.Gyms.Queries.GetGym;
@@ -8,9 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagement.Api.Controllers;
 
-[ApiController]
 [Route("subscriptions/{subscriptionId:guid}/gyms")]
-public class GymsController : ControllerBase
+public class GymsController : ApiController
 {
   private readonly IMediator _mediator;
 
@@ -28,9 +28,9 @@ public class GymsController : ControllerBase
 
     var createGymResult = await _mediator.Send(command);
 
-    return createGymResult.MatchFirst(
+    return createGymResult.Match(
       gym => Ok(new GymResponse(gym.Id, gym.Name)),
-      _ => Problem());
+      errors => Problem(errors));
   }
 
   [HttpDelete("{gymId:guid}")]
@@ -42,11 +42,9 @@ public class GymsController : ControllerBase
 
     var deleteGymResult = await _mediator.Send(command);
 
-    return deleteGymResult.MatchFirst<IActionResult>(
+    return deleteGymResult.Match(
       _ => NoContent(),
-      err => Problem(
-        statusCode: StatusCodes.Status404NotFound,
-        detail: err.Description));
+      errors => Problem(errors));
   }
 
   [HttpGet("{gymId:guid}")]
@@ -58,11 +56,9 @@ public class GymsController : ControllerBase
 
     var queryResult = await _mediator.Send(query);
 
-    return queryResult.MatchFirst(
+    return queryResult.Match(
       gym => Ok(new GymResponse(gym.Id, gym.Name)),
-      err => Problem(
-        statusCode: StatusCodes.Status404NotFound,
-        detail: err.Description));
+      errors => Problem(errors));
   }
 
   [HttpGet]
@@ -72,8 +68,10 @@ public class GymsController : ControllerBase
 
     var queryResult = await _mediator.Send(query);
 
-    return queryResult.MatchFirst(
+    return queryResult.Match(
       gyms => Ok(gyms.ConvertAll(gym => new GymResponse(gym.Id, gym.Name))),
-      _ => Problem());
+      errors => Problem(errors));
   }
+
+
 }

@@ -8,9 +8,8 @@ using DomainSubscriptionType = GymManagement.Domain.Subscriptions.SubscriptionTy
 
 namespace GymManagement.Api.Controllers;
 
-[ApiController]
 [Route("[controller]")]
-public class SubscriptionsController : ControllerBase
+public class SubscriptionsController : ApiController
 {
 
   private readonly IMediator _mediator;
@@ -38,9 +37,9 @@ public class SubscriptionsController : ControllerBase
 
     var createSubscriptionResult = await _mediator.Send(command);
 
-    return createSubscriptionResult.MatchFirst(
+    return createSubscriptionResult.Match(
       subscription => Ok(new SubscriptionResponse(subscription.Id, request.SubscriptionType)),
-      error => Problem());
+      errors => Problem(errors));
   }
 
   [HttpGet("{subscriptionId:guid}")]
@@ -50,11 +49,11 @@ public class SubscriptionsController : ControllerBase
 
     var getSubscriptionResult = await _mediator.Send(query);
 
-    return getSubscriptionResult.MatchFirst(
+    return getSubscriptionResult.Match(
       subscription => Ok(new SubscriptionResponse(
         subscription.Id,
         Enum.Parse<SubscriptionType>(subscription.SubscriptionType.Name))),
-      error => Problem()
+      errors => Problem(errors)
     );
   }
 
@@ -65,8 +64,8 @@ public class SubscriptionsController : ControllerBase
 
     var deleteSubscriptionResult = await _mediator.Send(command);
 
-    return deleteSubscriptionResult.Match<IActionResult>(
+    return deleteSubscriptionResult.Match(
       _ => NoContent(),
-      _ => Problem());
+      errors => Problem(errors));
   }
 }

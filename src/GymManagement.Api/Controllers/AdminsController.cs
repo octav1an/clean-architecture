@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagement.Api.Controllers;
 
-[ApiController]
 [Route("[controller]")]
-public class AdminsController : ControllerBase
+public class AdminsController : ApiController
 {
   private readonly IMediator _mediator;
 
@@ -23,8 +22,8 @@ public class AdminsController : ControllerBase
 
     var createResult = await _mediator.Send(command);
 
-    return createResult.MatchFirst(
+    return createResult.Match(
       admin => Ok(new AdminResponse(admin.Id)),
-      _ => Problem());
+      errors => Problem(errors));
   }
 }

@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagement.Api.Controllers;
 
-[ApiController]
 [Route("gyms/{gymId:guid}/rooms")]
-public class RoomsController : ControllerBase
+public class RoomsController : ApiController
 {
   private readonly IMediator _mediator;
 
@@ -28,9 +27,9 @@ public class RoomsController : ControllerBase
 
     var createRoomResult = await _mediator.Send(command);
 
-    return createRoomResult.MatchFirst(
+    return createRoomResult.Match(
       room => Ok(new RoomResponse(room.Id, room.Name)),
-      _ => Problem());
+      errors => Problem(errors));
   }
 
   [HttpDelete("{roomId:guid}")]
@@ -42,9 +41,9 @@ public class RoomsController : ControllerBase
 
     var deleteRoomResult = await _mediator.Send(command);
 
-    return deleteRoomResult.MatchFirst<IActionResult>(
+    return deleteRoomResult.Match(
       _ => NoContent(),
-      _ => Problem());
+      errors => Problem(errors));
   }
 
   [HttpGet]
@@ -54,8 +53,8 @@ public class RoomsController : ControllerBase
 
     var queryResult = await _mediator.Send(query);
 
-    return queryResult.MatchFirst(
+    return queryResult.Match(
       rooms => Ok(rooms.ConvertAll(room => new RoomResponse(room.Id, room.Name))),
-      _ => Problem());
+      errors => Problem(errors));
   }
 }
