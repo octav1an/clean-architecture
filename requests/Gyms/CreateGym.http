@@ -1,9 +1,9 @@
 @host=http://localhost:5136
-@subscriptionId=53bd097b-3f70-4b8d-8344-9a18b6e2082c
+@subscriptionId=D5E9EFDB-479E-4AB7-A483-2A07A7B98ACF
 
 POST {{host}}/subscriptions/{{subscriptionId}}/gyms
 Content-Type: application/json
 
 {
-  "Name": "Octavian's gym 2"
+  "Name": "Free gym 2"
 }
