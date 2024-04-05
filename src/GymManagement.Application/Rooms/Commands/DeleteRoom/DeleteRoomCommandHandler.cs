@@ -23,14 +23,14 @@ public class DeleteRoomCommandHandler : IRequestHandler<DeleteRoomCommand, Error
 
     if (gym is null)
     {
-      return Error.NotFound("Gym not found");
+      return Error.NotFound(description: "Gym not found");
     }
 
     var room = await _roomRepository.GeByIdAsync(request.RoomId);
 
     if (room is null)
     {
-      return Error.NotFound("Room not found");
+      return Error.NotFound(description: "Room not found");
     }
 
     gym.RemoveRoom(room.Id);
